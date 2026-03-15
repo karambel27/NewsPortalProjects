@@ -1,0 +1,39 @@
+In [1]: from News.models import Category, Author, Post, PostCategory, Comment
+In [2]: user1 = User.objects.create_user('user1')
+In [3]: user2 = User.objects.create_user('user2')
+In [4]: author1 = Author.objects.create(user=user1)
+In [5]: author2 = Author.objects.create(user=user2)
+In [6]: category1 = Category.objects.create(name="Наука")
+In [7]: category2 = Category.objects.create(name="Культура")
+In [8]: category3 = Category.objects.create(name="Политика")
+In [9]: category4 = Category.objects.create(name="Образование")
+In [10]: post_article_1 = Post.objects.create(author=author2, type='article',
+    ...:      title='Статья 1', content='Статья 1')
+
+In [11]: post_article_2 = Post.objects.create(author=author1, type='article',
+    ...:        title='Статья 2', content='Статья 2')
+
+In [12]: post_news_1 = Post.objects.create(author=author1, type='news',
+        title='Новость 1', content='новость 1')
+In [13]: post_news_2 = Post.objects.create(author=author1, type='news',
+        title='Новость 2', content='новость 2')
+In [14]: post_article_1.categories.add(category1, category2, category4)
+In [15]: post_article_2.categories.add(category2, category4)
+In [16]: post_news_1.categories.add(category4, category1)
+In [17]: post_news_2.categories.add(category4, category3)
+In [12]: comment_1 = Comment.objects.create(post=post_article_1, user=user2, text='комментарий 1')
+In [13]: comment_2 = Comment.objects.create(post=post_article_2, user=user2,text='комментарий 2')
+In [14]: comment_3 = Comment.objects.create(post=post_news_1, user=user2,text='комментарий 3')
+In [15]: comment_3 = Comment.objects.create(post=post_news_2, user=user2,text='комментарий 4')
+In [16]: comment_5 = Comment.objects.create(post=post_news_2, user=user1,text='комментарий 5')
+In [17]: comment_6 = Comment.objects.create(post=post_article_2, user=user2,text='комментарий 6')
+In [18]: for posts in Post.objects.all():
+    ...:         [posts.like() for _ in range(10, randint(15, 100))]
+    ...:         [posts.like() for _ in range(5, randint(10, 50))]
+In [19]: for posts in Comment.objects.all():
+    ...:         [posts.like() for _ in range(10, randint(15, 100))]
+    ...:         [posts.dislike() for _ in range(5, randint(5, 50))]
+    ...:
+
+
+
