@@ -1,8 +1,13 @@
+Пункт № 1
 In [1]: from News.models import Category, Author, Post, PostCategory, Comment
 In [2]: user1 = User.objects.create_user('user1')
 In [3]: user2 = User.objects.create_user('user2')
+
+Пункт № 2
 In [4]: author1 = Author.objects.create(user=user1)
 In [5]: author2 = Author.objects.create(user=user2)
+
+
 In [6]: category1 = Category.objects.create(name="Наука")
 In [7]: category2 = Category.objects.create(name="Культура")
 In [8]: category3 = Category.objects.create(name="Политика")
@@ -34,6 +39,33 @@ In [19]: for posts in Comment.objects.all():
     ...:         [posts.like() for _ in range(10, randint(15, 100))]
     ...:         [posts.dislike() for _ in range(5, randint(5, 50))]
     ...:
+In [20]: author1.update_rating()
+In [21]: author2.update_rating()
+In [22]: best_user = Author.objects.order_by('-rating').first()
+In [23]: print(f"Лучший пользователь: {best_user.user.username}, Рейтинг: {best_user.rating}")
+Лучший пользователь: user2, Рейтинг: 628
+In [24]: best = Post.objects.filter(type='article').order_by('rating').last()
+In [25]: print(f'Дата добавления: {best.created_at.date()}, Автор: {best.author.user.username},
+        рейтинг: {best.rating} Заголовок: {best.title}, Превью: {best.preview()}')
+Дата добавления: 2026-03-15, Автор: user2, рейтинг: 78.0 Заголовок: Статья 1, Превью: Статья 1...
+In [26]: best = Post.objects.filter(type='article').order_by('rating').last()
+In [27]: for comment in best.comment_set.all():
+    ...:         print(f"""
+    ...:         Дата: {comment.created_at.date()}
+    ...:         Пользователь: {comment.user.username}
+    ...:         Рейтинг: {comment.rating}
+    ...:         Текст: {comment.text}
+    ...:         """)
+    ...:
+
+        Дата: 2026-03-15
+        Пользователь: user1
+        Рейтинг: 108
+        Текст: комментарий 3
+
+
+
+
 
 
 
