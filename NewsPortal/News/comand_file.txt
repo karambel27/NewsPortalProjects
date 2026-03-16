@@ -1,53 +1,66 @@
-Пункт № 1
+Пункт № 1 (Создать 2 пользователей)
 In [1]: from News.models import Category, Author, Post, PostCategory, Comment
 In [2]: user1 = User.objects.create_user('user1')
 In [3]: user2 = User.objects.create_user('user2')
 
-Пункт № 2
+Пункт № 2 (Создать 2 Author)
 In [4]: author1 = Author.objects.create(user=user1)
 In [5]: author2 = Author.objects.create(user=user2)
 
-
+Пункт № 3 (Добавить 4 категории)
 In [6]: category1 = Category.objects.create(name="Наука")
 In [7]: category2 = Category.objects.create(name="Культура")
 In [8]: category3 = Category.objects.create(name="Политика")
 In [9]: category4 = Category.objects.create(name="Образование")
+
+Пункт № 4 (Добавить статьи и новости)
 In [10]: post_article_1 = Post.objects.create(author=author2, type='article',
     ...:      title='Статья 1', content='Статья 1')
-
 In [11]: post_article_2 = Post.objects.create(author=author1, type='article',
     ...:        title='Статья 2', content='Статья 2')
-
 In [12]: post_news_1 = Post.objects.create(author=author1, type='news',
         title='Новость 1', content='новость 1')
 In [13]: post_news_2 = Post.objects.create(author=author1, type='news',
         title='Новость 2', content='новость 2')
+
+Пункт № 5(Присвоить категории постам)
 In [14]: post_article_1.categories.add(category1, category2, category4)
 In [15]: post_article_2.categories.add(category2, category4)
 In [16]: post_news_1.categories.add(category4, category1)
 In [17]: post_news_2.categories.add(category4, category3)
+
+Пункт № 6 (Создать комментарии)
 In [12]: comment_1 = Comment.objects.create(post=post_article_1, user=user2, text='комментарий 1')
 In [13]: comment_2 = Comment.objects.create(post=post_article_2, user=user2,text='комментарий 2')
 In [14]: comment_3 = Comment.objects.create(post=post_news_1, user=user2,text='комментарий 3')
 In [15]: comment_3 = Comment.objects.create(post=post_news_2, user=user2,text='комментарий 4')
 In [16]: comment_5 = Comment.objects.create(post=post_news_2, user=user1,text='комментарий 5')
 In [17]: comment_6 = Comment.objects.create(post=post_article_2, user=user2,text='комментарий 6')
+
+Пункт № 7 (Скорректировать рейтинги: like(), dislike())
 In [18]: for posts in Post.objects.all():
     ...:         [posts.like() for _ in range(10, randint(15, 100))]
     ...:         [posts.like() for _ in range(5, randint(10, 50))]
 In [19]: for posts in Comment.objects.all():
     ...:         [posts.like() for _ in range(10, randint(15, 100))]
     ...:         [posts.dislike() for _ in range(5, randint(5, 50))]
-    ...:
+
+Пункт № 8 (Обновить рейтинги пользователей)
 In [20]: author1.update_rating()
 In [21]: author2.update_rating()
+
+Пункт № 9 (Вывести лучшего пользователя)
 In [22]: best_user = Author.objects.order_by('-rating').first()
 In [23]: print(f"Лучший пользователь: {best_user.user.username}, Рейтинг: {best_user.rating}")
-Лучший пользователь: user2, Рейтинг: 628
+Вывод: Лучший пользователь: user2, Рейтинг: 628
+
+Пункт № 10 (Вывести данные лучшей статьи)
 In [24]: best = Post.objects.filter(type='article').order_by('rating').last()
 In [25]: print(f'Дата добавления: {best.created_at.date()}, Автор: {best.author.user.username},
         рейтинг: {best.rating} Заголовок: {best.title}, Превью: {best.preview()}')
-Дата добавления: 2026-03-15, Автор: user2, рейтинг: 78.0 Заголовок: Статья 1, Превью: Статья 1...
+Вывод: Дата добавления: 2026-03-15, Автор: user2, рейтинг: 78.0 Заголовок: Статья 1, Превью: Статья 1...
+
+Пункт № 11 (Вывести все комментарии лучшей статьи)
 In [26]: best = Post.objects.filter(type='article').order_by('rating').last()
 In [27]: for comment in best.comment_set.all():
     ...:         print(f"""
@@ -57,7 +70,6 @@ In [27]: for comment in best.comment_set.all():
     ...:         Текст: {comment.text}
     ...:         """)
     ...:
-
         Дата: 2026-03-15
         Пользователь: user1
         Рейтинг: 108

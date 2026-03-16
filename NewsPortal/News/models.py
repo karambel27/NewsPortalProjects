@@ -39,8 +39,7 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length=7, choices=POST_TYPES)
     created_at = models.DateTimeField(auto_now_add=True)
-    categories = models.ManyToManyField(Category, through='PostCategory', blank=True,
-                                        related_name='cat')
+    categories = models.ManyToManyField(Category, through='PostCategory', blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     rating = models.FloatField(default=0.0)
