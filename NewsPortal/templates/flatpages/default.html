@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>{{ title }}</title>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href='{% static "css/styles.css" %}' rel="stylesheet"/>
+</head>
+<body>
+<!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#!">Мой сайт</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<!--            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">-->
+<!--                {% for m in menu %}-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="{% url m.url_name %}">{{ m.title }}</a>-->
+<!--                </li>-->
+<!--                {% endfor %}-->
+<!--            </ul>-->
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/4ulffa6qoKA/1200x800')">
+    {% block main %}
+    {% endblock main %}
+    <hr>
+    <div style="height: 20rem">
+
+
+
+    </div>
+</div>
+
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Спасибо за просмотр</p></div>
+</footer>
+
+</body>
+</html>
