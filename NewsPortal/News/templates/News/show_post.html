@@ -1,0 +1,6 @@
+{% extends 'flatpages/default.html' %}
+{% load News_tags %}
+{% block main %}
+        <p><b>Дата публикации: </b>{{ post.created_at|current_time }}</p>
+        <p>{{ post.content|censor}}</p>
+{% endblock %}

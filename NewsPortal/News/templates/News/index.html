@@ -1,4 +1,22 @@
 {% extends 'flatpages/default.html' %}
 {% block main %}
-<h1>Хай</h1>
+{% load News_tags %}
+<ul>
+{% for post in posts %}
+    <li>
+        <h1>{{ post.title|censor }}</h1>
+        <p><b>Дата публикации: </b>{{ post.created_at|current_time|censor}}</p>
+        <p>{{ post.content|truncatechars:20|censor}}</p>
+            <button><a href="{% url post.type post.id%}">читать пост</a></button>
+
+
+        <hr>
+    </li>
+
+{% endfor %}
+</ul>
 {% endblock %}
+
+
+<!--Вывести все статьи в виде заголовка, даты публикации и первых 20 символов текста.-->
+<!--Новости должны выводиться в порядке от более свежей к самой старой.-->

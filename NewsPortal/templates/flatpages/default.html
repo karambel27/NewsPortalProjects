@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load News_tags %}
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -19,13 +20,22 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-<!--            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">-->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Главная страница</a>
+                </li>
+                <li>
+                   <a class="nav-link" href="{% url 'newss' %}">Новости</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'articlee' %}">Статьи</a>
+                </li>
 <!--                {% for m in menu %}-->
 <!--                <li class="nav-item">-->
 <!--                    <a class="nav-link" href="{% url m.url_name %}">{{ m.title }}</a>-->
-<!--                </li>-->
+
 <!--                {% endfor %}-->
-<!--            </ul>-->
+            </ul>
 
         </div>
     </div>
@@ -33,9 +43,11 @@
 
 
 <div class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/4ulffa6qoKA/1200x800')">
+    <h1 align="center">{{ title|censor }}</h1>
+    <hr>
     {% block main %}
     {% endblock main %}
-    <hr>
+
     <div style="height: 20rem">
 
 
