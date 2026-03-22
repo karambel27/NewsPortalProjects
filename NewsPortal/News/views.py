@@ -8,7 +8,9 @@ def index(requests):
     posts = models.Post.objects.all().order_by('-created_at')
     data = {
         'title': 'Главная страница',
-        'posts': posts}
+        'posts': posts,
+        'length_post': f'Количество новостей: {models.Post.objects.filter(type='news').count()} '
+                       f'Количество статей: {models.Post.objects.filter(type='article').count()}'}
     return render(requests, 'News/index.html', data)
 
 
@@ -23,6 +25,7 @@ class NewsList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['title'] = 'Список новостей'
+        context['length_post'] = f'Количество новостей: {self.queryset.count()} '
         return context
 
 
@@ -37,6 +40,8 @@ class ArticleList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['title'] = 'Список статей'
+        context['length_post'] = f'Количество статей: {self.queryset.count()} '
+
         return context
 
 
