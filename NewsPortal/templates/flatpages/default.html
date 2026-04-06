@@ -15,7 +15,7 @@
 <!-- Responsive navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#!">Мой сайт</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Мой сайт</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
@@ -25,10 +25,10 @@
                     <a class="nav-link" href="{% url 'home' %}">Главная страница</a>
                 </li>
                 <li>
-                   <a class="nav-link" href="{% url 'newss' %}">Новости</a>
+                   <a class="nav-link" href="{% url 'news' %}">Новости</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{% url 'articlee' %}">Статьи</a>
+                    <a class="nav-link" href="{% url 'articles' %}">Статьи</a>
                 </li>
 <!--                {% for m in menu %}-->
 <!--                <li class="nav-item">-->

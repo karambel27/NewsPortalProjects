@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -44,6 +45,7 @@ class Post(models.Model):
     content = models.TextField()
     rating = models.FloatField(default=0.0)
 
+
     def preview(self):
         return self.content[:124]+"..."
 
@@ -58,6 +60,8 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title}: {self.preview()}'
+
+
 
 
 class PostCategory(models.Model):
@@ -82,10 +86,4 @@ class Comment(models.Model):
             self.save()
 
 
-"""Методы like() и dislike() в моделях Comment и Post, которые увеличивают/уменьшают рейтинг на единицу.
-Метод preview() модели Post, который возвращает начало статьи (предварительный просмотр) длиной 124 символа и добавляет многоточие в конце.
-Метод update_rating() модели Author, который обновляет рейтинг текущего автора (метод принимает в качестве аргумента только self).
-Он состоит из следующего:
-суммарный рейтинг каждой статьи автора умножается на 3;
-суммарный рейтинг всех комментариев автора;
-суммарный рейтинг всех комментариев к статьям автора."""
+
