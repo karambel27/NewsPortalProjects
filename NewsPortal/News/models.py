@@ -7,6 +7,9 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.user.username
+
     def update_rating(self):
         """
         Обновляет рейтинг автора исходя из трех составляющих:

@@ -1,6 +1,14 @@
 {% extends 'flatpages/default.html' %}
 {% block main %}
 {% load News_tags %}
+<form action="" method="get">
+    {{ filterset.form.as_p }}
+    <input type="submit" value="Найти"/>
+    <p>Найдено по заданным критерием постов: {{ num_post }}</p>
+</form>
+<br>
+<br>
+<br>
 <ul>
     {% for post in posts %}
     <li>
@@ -26,19 +34,19 @@
 <nav class="list-pages">
     <ul>
         {% if page_obj.has_previous %}
-        <li><a href="?page={{ 1 }}">Первая</a></li>
-        <li class="page-num"><a href="?page={{ page_obj.previous_page_number }}">&lt</a></li>
+        <li><a href="?{% url_replace page=1 %}">Первая</a></li>
+        <li class="page-num"><a href="?{% url_replace page=page_obj.previous_page_number %}">&lt</a></li>
         {% endif %}
         {% for f in page_obj.paginator.page_range %}
         {% if page_obj.number == f %}
         <li class="pagenum">{{ f }}</li>
         {% elif page_obj.number|add:-2 <= f and page_obj.number|add:2 >= f %}
-        <li class="page-num page-num-selected"><a href="?page={{ f }}">{{ f }}</a></li>
+        <li class="page-num page-num-selected"><a href="?{% url_replace page=f %}">{{ f }}</a></li>
         {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
-        <li class="page-num"><a href="?page={{ page_obj.next_page_number }}">&gt</a></li>
-        <li><a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a></li>
+        <li class="page-num"><a href="?{% url_replace page=page_obj.next_page_number %}">&gt</a></li>
+        <li><a href="?{% url_replace page=page_obj.paginator.num_pages %}">Последняя</a></li>
         {% endif %}
 
     </ul>

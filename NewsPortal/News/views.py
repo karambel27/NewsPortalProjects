@@ -6,6 +6,7 @@ from . import models
 from .form import FormAddpost
 from .models import Post
 from .utils import PostTypeValidationMixin
+from .filters import NewsFilter
 
 
 class IndexView(ListView):
@@ -19,10 +20,16 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        context['filterset'] = self.filterset
         context['length_post'] = (f'Количество новостей: {models.Post.objects.filter(type='news').count()} '
                                   f'Количество статей: {models.Post.objects.filter(type='article').count()}')
-
+        context['num_post'] = len(self.filterset.qs)
         return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = NewsFilter(self.request.GET, queryset)
+        return self.filterset.qs
 
 
 class PostsList(ListView):
@@ -91,7 +98,6 @@ class DeletePost(PostTypeValidationMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = f'({self.object.title}): Удаление'
         return context
-
 
 # def index(requests):
 #     posts = models.Post.objects.all().order_by('-created_at')
