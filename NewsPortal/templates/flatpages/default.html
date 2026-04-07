@@ -30,11 +30,13 @@
                 <li>
                     <a class="nav-link" href="{% url 'articles' %}">Статьи</a>
                 </li>
-<!--                {% for m in menu %}-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="{% url m.url_name %}">{{ m.title }}</a>-->
+                <li>
+                    <a class="nav-link" href="{% url 'addnews' %}">Добавить новость</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'addarticles' %}">Добавить статью </a>
+                </li>
 
-<!--                {% endfor %}-->
             </ul>
 
         </div>
@@ -48,11 +50,10 @@
     <hr>
     {% block main %}
     {% endblock main %}
+    {% block paginator %}
+    {% endblock %}
 
     <div style="height: 20rem">
-
-
-
     </div>
 </div>
 

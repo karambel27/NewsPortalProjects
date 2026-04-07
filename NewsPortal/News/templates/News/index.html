@@ -2,23 +2,49 @@
 {% block main %}
 {% load News_tags %}
 <ul>
-{% for post in posts %}
+    {% for post in posts %}
     <li>
         <h1>{{ post.title|censor }}</h1>
         <p><b>Дата публикации: </b>{{ post.created_at|current_time|censor}}</p>
         <p>{{ post.content|truncatechars:20|censor}}</p>
-        {%  if post.type == 'news'%}
-            <button><a href="{% url 'new' post.id%}">Читать пост</a></button>
+        {% if post.type == 'news'%}
+        <button><a href="{% url 'new' post.id%}">Читать пост</a></button>
         {% else %}
-            <button><a href="{% url 'article' post.id%}">Читать пост</a></button>
-        {% endif  %}
+        <button><a href="{% url 'article' post.id%}">Читать пост</a></button>
+        {% endif %}
 
 
         <hr>
     </li>
 
-{% endfor %}
+    {% endfor %}
 </ul>
+{% endblock %}
+{% block paginator %}
+{% if page_obj.has_other_pages %}
+
+<nav class="list-pages">
+    <ul>
+        {% if page_obj.has_previous %}
+        <li><a href="?page={{ 1 }}">Первая</a></li>
+        <li class="page-num"><a href="?page={{ page_obj.previous_page_number }}">&lt</a></li>
+        {% endif %}
+        {% for f in page_obj.paginator.page_range %}
+        {% if page_obj.number == f %}
+        <li class="pagenum">{{ f }}</li>
+        {% elif page_obj.number|add:-2 <= f and page_obj.number|add:2 >= f %}
+        <li class="page-num page-num-selected"><a href="?page={{ f }}">{{ f }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-num"><a href="?page={{ page_obj.next_page_number }}">&gt</a></li>
+        <li><a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a></li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
+<!---->
 {% endblock %}
 
 

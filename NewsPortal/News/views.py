@@ -1,24 +1,35 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from . import models
+from .form import FormAddpost
 from .models import Post
+from .utils import PostTypeValidationMixin
 
 
 class IndexView(ListView):
+    model = Post
     template_name = 'News/index.html'
-    queryset = Post.objects.all().order_by('-created_at')
+    ordering = '-created_at'
     context_object_name = 'posts'
     extra_context = {
-        'title': 'Главная страница',
-        'length_post': f'Количество новостей: {models.Post.objects.filter(type='news').count()} '
-                       f'Количество статей: {models.Post.objects.filter(type='article').count()}'}
+        'title': 'Главная страница'}
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['length_post'] = (f'Количество новостей: {models.Post.objects.filter(type='news').count()} '
+                                  f'Количество статей: {models.Post.objects.filter(type='article').count()}')
+
+        return context
 
 
 class PostsList(ListView):
     model = models.Post
     template_name = 'News/index.html'
     context_object_name = 'posts'
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -32,7 +43,7 @@ class PostsList(ListView):
         return Post.objects.filter(type=self.post_type).order_by('-created_at')
 
 
-class ShowPost(DetailView):
+class ShowPost(PostTypeValidationMixin, DetailView):
     model = models.Post
     template_name = 'News/show_post.html'
     context_object_name = 'post'
@@ -42,6 +53,45 @@ class ShowPost(DetailView):
         dic = {'news': 'Новость', 'article': 'Статья'}
         context['title'] = f'{dic[self.object.type]}: {self.object.title}'
         return context
+
+
+class AddPost(CreateView):
+    model = Post
+    # success_url = reverse_lazy('home')
+    form_class = FormAddpost
+    template_name = 'News/add_post.html'
+
+    def form_valid(self, form):
+        post_type = self.kwargs.get('post_type')
+        form.instance.type = post_type
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dic = {'news': 'новостей', 'article': 'статьи'}
+        context['title'] = 'Добавление ' + dic[self.kwargs.get('post_type')]
+        return context
+
+
+class UpdatePost(PostTypeValidationMixin, UpdateView):
+    model = Post
+    template_name = 'News/add_post.html'
+    # success_url = reverse_lazy('home')
+    fields = ['author', 'title', 'content',
+              'categories']
+
+
+class DeletePost(PostTypeValidationMixin, DeleteView):
+    model = Post
+    template_name = 'News/delete_post.html'
+    context_object_name = 'post'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'({self.object.title}): Удаление'
+        return context
+
 
 # def index(requests):
 #     posts = models.Post.objects.all().order_by('-created_at')

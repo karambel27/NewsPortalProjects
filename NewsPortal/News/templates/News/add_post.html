@@ -1,0 +1,11 @@
+{% extends 'flatpages/default.html' %}
+{% block main %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for x in form %}
+        <p><label class="form_label" for="{{ x.id_for_label }}">{{ x.label }}</label>{{ x }}</p>
+        <div class="form-error">{{ x.errors }}</div>
+        {% endfor %}
+        <p><button type="submit">Отправить</button></p>
+    </form>
+{% endblock %}

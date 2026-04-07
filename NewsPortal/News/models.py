@@ -14,13 +14,12 @@ class Author(models.Model):
         2. Суммы оценок собственных комментариев.
         3. Суммы оценок комментариев под своими статьями.
         """
-        summ_article = sum([posts.rating for posts in Post.objects.filter(author=self, type='article')])*3
+        summ_article = sum([posts.rating for posts in Post.objects.filter(author=self, type='article')]) * 3
         summ_comments = sum([comments.rating for comments in Comment.objects.filter(user=self.user)])
-        summ_author = sum([comments.rating for comments in Comment.objects.filter(post__author=self, post__type='article')])
-        self.rating = summ_article+summ_comments+summ_author
+        summ_author = sum(
+            [comments.rating for comments in Comment.objects.filter(post__author=self, post__type='article')])
+        self.rating = summ_article + summ_comments + summ_author
         self.save()
-
-
 
 
 class Category(models.Model):
@@ -37,17 +36,19 @@ POST_TYPES = (
 
 
 class Post(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    type = models.CharField(max_length=7, choices=POST_TYPES)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
+    type = models.CharField(max_length=7, choices=POST_TYPES, verbose_name='Тип поста')
     created_at = models.DateTimeField(auto_now_add=True)
-    categories = models.ManyToManyField(Category, through='PostCategory', blank=True)
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    rating = models.FloatField(default=0.0)
+    categories = models.ManyToManyField(Category, through='PostCategory', blank=True, verbose_name='Категория')
+    title = models.CharField(max_length=255, verbose_name='Название')
+    content = models.TextField(verbose_name='Контент')
+    rating = models.FloatField(default=0.0, verbose_name='Рейтинг')
 
+    def get_absolute_url(self):
+        return reverse('new' if self.type == 'news' else 'article', kwargs={'pk': self.pk})
 
     def preview(self):
-        return self.content[:124]+"..."
+        return self.content[:124] + "..."
 
     def like(self):
         self.rating += 1
@@ -60,8 +61,6 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title}: {self.preview()}'
-
-
 
 
 class PostCategory(models.Model):
@@ -84,6 +83,3 @@ class Comment(models.Model):
         if self.rating >= 1:
             self.rating -= 1
             self.save()
-
-
-
