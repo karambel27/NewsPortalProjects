@@ -14,6 +14,7 @@ urlpatterns = [
     path('articles/create/', views.AddPost.as_view(), {'post_type': 'article'}, name='addarticles'),
     path('articles/<int:pk>/edit/', views.UpdatePost.as_view(), {'post_type': 'article'}, name='updatearticles'),
     path('articles/<int:pk>/delete/', views.DeletePost.as_view(), {'post_type': 'article'}, name='deletearticles'),
+    path('news/search/', views.PostsList.as_view(), {'post_type': 'news'}, name='newsearch'),
     path('__debug__/', include("debug_toolbar.urls")),
 ]
 

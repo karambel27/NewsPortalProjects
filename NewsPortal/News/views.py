@@ -16,13 +16,13 @@ class IndexView(ListView):
     context_object_name = 'posts'
     extra_context = {
         'title': 'Главная страница'}
-    paginate_by = 3
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['filterset'] = self.filterset
-        context['length_post'] = (f'Количество новостей: {models.Post.objects.filter(type='news').count()} '
-                                  f'Количество статей: {models.Post.objects.filter(type='article').count()}')
+        context['length_post'] = (f'Количество новостей: {self.get_queryset().filter(type='news').count()} '
+                                  f'Количество статей: {self.get_queryset().filter(type='article').count()}')
         context['num_post'] = len(self.filterset.qs)
         return context
 
@@ -36,10 +36,12 @@ class PostsList(ListView):
     model = models.Post
     template_name = 'News/index.html'
     context_object_name = 'posts'
-    paginate_by = 3
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        context['filterset'] = self.filterset
+        context['num_post'] = len(self.filterset.qs)
         context['title'] = 'Список новостей' if self.post_type == 'news' else 'Список статей'
         type_name = 'новостей' if self.post_type == 'news' else 'статей'
         context['length_post'] = f'Количество {type_name}: {self.get_queryset().count()}'
@@ -47,7 +49,8 @@ class PostsList(ListView):
 
     def get_queryset(self):
         self.post_type = self.kwargs.get('post_type')
-        return Post.objects.filter(type=self.post_type).order_by('-created_at')
+        self.filterset = NewsFilter(self.request.GET, Post.objects.filter(type=self.post_type).order_by('-created_at'))
+        return self.filterset.qs
 
 
 class ShowPost(PostTypeValidationMixin, DetailView):
@@ -86,6 +89,12 @@ class UpdatePost(PostTypeValidationMixin, UpdateView):
     # success_url = reverse_lazy('home')
     fields = ['author', 'title', 'content',
               'categories']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dic = {'news': 'новостей', 'article': 'статьи'}
+        context['title'] = 'Редактирование ' + dic[self.kwargs.get('post_type')]
+        return context
 
 
 class DeletePost(PostTypeValidationMixin, DeleteView):
