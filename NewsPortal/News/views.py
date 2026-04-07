@@ -6,7 +6,7 @@ from . import models
 from .form import FormAddpost
 from .models import Post
 from .utils import PostTypeValidationMixin
-from .filters import NewsFilter
+from .filters import PostsFilter
 
 
 class IndexView(ListView):
@@ -28,7 +28,7 @@ class IndexView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        self.filterset = NewsFilter(self.request.GET, queryset)
+        self.filterset = PostsFilter(self.request.GET, queryset)
         return self.filterset.qs
 
 
@@ -49,7 +49,7 @@ class PostsList(ListView):
 
     def get_queryset(self):
         self.post_type = self.kwargs.get('post_type')
-        self.filterset = NewsFilter(self.request.GET, Post.objects.filter(type=self.post_type).order_by('-created_at'))
+        self.filterset = PostsFilter(self.request.GET, Post.objects.filter(type=self.post_type).order_by('-created_at'))
         return self.filterset.qs
 
 

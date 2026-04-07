@@ -4,7 +4,7 @@ from .models import Post, Author
 from django import forms
 
 
-class NewsFilter(FilterSet):
+class PostsFilter(FilterSet):
     title = CharFilter(
         field_name='title',
         lookup_expr='icontains',
