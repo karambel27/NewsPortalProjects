@@ -25,7 +25,7 @@
                     <a class="nav-link" href="{% url 'home' %}">Главная страница</a>
                 </li>
                 <li>
-                   <a class="nav-link" href="{% url 'news' %}">Новости</a>
+                    <a class="nav-link" href="{% url 'news' %}">Новости</a>
                 </li>
                 <li>
                     <a class="nav-link" href="{% url 'articles' %}">Статьи</a>
@@ -36,6 +36,22 @@
                 <li>
                     <a class="nav-link" href="{% url 'addarticles' %}">Добавить статью </a>
                 </li>
+                {% if user.is_authenticated %}
+                <li>
+                <li>
+                    <a class="nav-link" href="{% url 'users:profile' %}">{{ user.username }}</a>
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">
+                            Выйти
+                        </button>
+                    </form>
+                </li>
+                {% else %}
+                <li>
+                    <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+                </li>
+                {% endif %}
 
             </ul>
 

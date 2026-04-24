@@ -9,6 +9,8 @@ from .utils import PostTypeValidationMixin
 from .filters import PostsFilter
 
 
+# 1031596841944-kqrul6a20r6slhmhb9jpng6c0aga3spj.apps.googleusercontent.com
+# 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
 class IndexView(ListView):
     model = Post
     template_name = 'News/index.html'

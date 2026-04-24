@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-wixgshxu6mrquo3gerfy_2ntw-i8-32=-eww23l@y9nsa3we@b
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1"]
-INTERNAL_IPS =["127.0.0.1"]
+INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
 
@@ -37,11 +37,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.yandex",
     "News",
     "django.contrib.sites",
     "django.contrib.flatpages",
     "debug_toolbar",
     'django_filters',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = "NewsPortal.urls"
@@ -74,8 +81,31 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
+                           'allauth.account.auth_backends.AuthenticationBackend']
+
+ACCOUNT_SIGNUP_FIELDS = ['username', 'email*', 'password1*', 'password2*']
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {'APP': {
+        'client_id': '123',
+        'secret': '456',
+        'key': ''
+    }},
+    'yandex': {'APP': {
+        'client_id': '123',
+        'secret': '456',
+        'key': ''
+    }}
+}
+
+ACCOUNT_FORMS = {'signup': 'News.form.RegisterForm'}
 SITE_ID = 1
 WSGI_APPLICATION = "NewsPortal.wsgi.application"
+ACCOUNT_SESSION_REMEMBER = True
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -120,4 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR/'static']
+STATICFILES_DIRS = [BASE_DIR / 'static']
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'users:login'
