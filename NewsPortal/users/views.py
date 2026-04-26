@@ -46,8 +46,6 @@ def statauthor(request):
 
     return redirect(request.META.get('HTTP_REFERER'))
 
-
-
 # class RegisterUser(CreateView):
 #     form_class = RegisterFormUser
 #     template_name = 'users/register.html'
