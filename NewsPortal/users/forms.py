@@ -4,6 +4,7 @@ from allauth.account.forms import SignupForm
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
 
@@ -52,4 +53,6 @@ class MyCustomSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
+        common_group = Group.objects.get(name='common')
+        user.groups.add(common_group)
         return user

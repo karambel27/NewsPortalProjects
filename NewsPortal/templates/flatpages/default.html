@@ -30,12 +30,14 @@
                 <li>
                     <a class="nav-link" href="{% url 'articles' %}">Статьи</a>
                 </li>
+                {% if perms.News.add_post %}
                 <li>
                     <a class="nav-link" href="{% url 'addnews' %}">Добавить новость</a>
                 </li>
                 <li>
                     <a class="nav-link" href="{% url 'addarticles' %}">Добавить статью </a>
                 </li>
+                {% endif %}
                 {% if user.is_authenticated %}
                 <li>
                 <li>

@@ -7,6 +7,12 @@
     {% else %}
     <p><img src="/media/users/photo_default.jpg"></p>
     {% endif %}
+    {% if author_prov %}
+    <h1>Вы являетесь Автором!!!</h1>
+    {% else %}
+    <a href="{% url 'users:statauthor' %}">Стать Автором!!!</a>
+    {% endif %}
+
     <input type="hidden" name='next' value="{{ next }}"/>
     <div class="form-error">{{ form.non_field_errors }}</div>
     {% for f in form %}
