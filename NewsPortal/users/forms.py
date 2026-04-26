@@ -1,6 +1,8 @@
+from allauth.account.forms import SignupForm
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.exceptions import ValidationError
 
 
 class LoginForm(AuthenticationForm):
@@ -23,3 +25,28 @@ class ProfileUserForm(forms.ModelForm):
             'first_name': 'Имя',
             'last_name': 'Фамилия',
         }
+
+
+class RegisterFormUser(UserCreationForm):
+    username = forms.CharField(max_length=100, label='Логин')
+    password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(), label="Пароль")
+    password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(), label="Повтор пароля")
+
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+        labels = {'email': 'E-mail',
+                  'first_name': 'Имя',
+                  'last_name': 'Фамилия'}
+
+    def clean_email(self):
+        if get_user_model().objects.filter(email=self.cleaned_data['email']).exists():
+            raise ValidationError('Этот E-mail уже зарегистрирован')
+        return self.cleaned_data['email']
+
+
+class MyCustomSignupForm(SignupForm):
+
+    def save(self, request):
+        user = super().save(request)
+        return user

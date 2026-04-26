@@ -7,15 +7,6 @@
 {% element h1 %}
 {% trans "Sign Up" %}
 {% endelement %}
-{% setvar link %}
-<a href="{{ login_url }}">
-    {% endsetvar %}
-    {% setvar end_link %}
-</a>
-{% endsetvar %}
-{% element p %}
-{% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
-{% endelement %}
 {% if not SOCIALACCOUNT_ONLY %}
 {% url 'account_signup' as action_url %}
 <form method="post">
@@ -23,7 +14,7 @@
     <input type="hidden" name="next" value="{{ next }}"/>
     <div class="form-error">{{ form.non_field_errors }}</div>
     {% for f in form %}
-    <p><label for="{{ f.id_for_label }}">{{f.label}}</label>{{ f }}</p>
+    <p><label for="{{ f.id_for_label }}"></label>{{ f }}</p>
     <div class="form-error">{{ f.errors }}</div>
     {% endfor %}
     <p>
@@ -42,3 +33,4 @@
 {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
 {% endif %}
 {% endblock content %}
+

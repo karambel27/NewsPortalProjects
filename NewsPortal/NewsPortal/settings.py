@@ -84,25 +84,13 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
                            'allauth.account.auth_backends.AuthenticationBackend']
 
-ACCOUNT_SIGNUP_FIELDS = ['username', 'email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ['username*', 'email*', 'password1*', 'password2*']
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {'APP': {
-        'client_id': '123',
-        'secret': '456',
-        'key': ''
-    }},
-    'yandex': {'APP': {
-        'client_id': '123',
-        'secret': '456',
-        'key': ''
-    }}
-}
 
-ACCOUNT_FORMS = {'signup': 'News.form.RegisterForm'}
+ACCOUNT_FORMS = {'signup': 'users.forms.MyCustomSignupForm'}
 SITE_ID = 1
 WSGI_APPLICATION = "NewsPortal.wsgi.application"
 ACCOUNT_SESSION_REMEMBER = True
@@ -153,4 +141,4 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / 'static']
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
-LOGIN_URL = 'users:login'
+LOGIN_URL = 'account_login'

@@ -16,10 +16,4 @@ class FormAddpost(forms.ModelForm):
                   'categories']
 
 
-class RegisterForm(SignupForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-    def save(self, request):
-        user = super().save(request)
-        return user
