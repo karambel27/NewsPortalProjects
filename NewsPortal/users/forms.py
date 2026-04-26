@@ -1,3 +1,5 @@
+import datetime
+
 from allauth.account.forms import SignupForm
 from django import forms
 from django.contrib.auth import get_user_model
@@ -17,10 +19,11 @@ class LoginForm(AuthenticationForm):
 class ProfileUserForm(forms.ModelForm):
     username = forms.CharField(disabled=True, label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     email = forms.CharField(disabled=True, label='E-mail', widget=forms.TextInput(attrs={'class': 'form-input'}))
-
+    time_yeld = datetime.date.today().year
+    data_bird = forms.DateField(widget=forms.SelectDateWidget(years=tuple(range(time_yeld - 80, time_yeld - 5))))
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'first_name', 'last_name']
+        fields = ['photo', 'username', 'email', 'data_bird', 'first_name', 'last_name']
         labels = {
             'first_name': 'Имя',
             'last_name': 'Фамилия',

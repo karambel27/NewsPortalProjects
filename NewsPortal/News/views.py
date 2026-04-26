@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -21,7 +22,7 @@ class IndexView(ListView):
     context_object_name = 'posts'
     extra_context = {
         'title': 'Главная страница'}
-    paginate_by = 10
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -41,7 +42,7 @@ class PostsList(ListView):
     model = models.Post
     template_name = 'News/index.html'
     context_object_name = 'posts'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -66,19 +67,23 @@ class ShowPost(PostTypeValidationMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         dic = {'news': 'Новость', 'article': 'Статья'}
+        context['edit_prov'] = self.request.user == self.get_object().author.user or self.request.user.is_superuser
         context['title'] = f'{dic[self.object.type]}: {self.object.title}'
         return context
 
 
-class AddPost(CreateView):
+class AddPost(PermissionRequiredMixin, CreateView):
     model = Post
     # success_url = reverse_lazy('home')
     form_class = FormAddpost
     template_name = 'News/add_post.html'
+    permission_required = 'News.add_post'
 
     def form_valid(self, form):
         post_type = self.kwargs.get('post_type')
         form.instance.type = post_type
+        w = form.save(commit=False)
+        w.author = self.request.user.author
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -88,7 +93,7 @@ class AddPost(CreateView):
         return context
 
 
-class UpdatePost(PostTypeValidationMixin, UpdateView):
+class UpdatePost(PostTypeValidationMixin, UserPassesTestMixin, UpdateView):
     model = Post
     template_name = 'News/add_post.html'
     # success_url = reverse_lazy('home')
@@ -102,7 +107,7 @@ class UpdatePost(PostTypeValidationMixin, UpdateView):
         return context
 
 
-class DeletePost(PostTypeValidationMixin, DeleteView):
+class DeletePost(PostTypeValidationMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'News/delete_post.html'
     context_object_name = 'post'

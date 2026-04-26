@@ -89,7 +89,6 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 
-
 ACCOUNT_FORMS = {'signup': 'users.forms.MyCustomSignupForm'}
 SITE_ID = 1
 WSGI_APPLICATION = "NewsPortal.wsgi.application"
@@ -142,3 +141,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'account_login'
+AUTH_USER_MODEL = 'users.User'
+MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_URL = '/media/'
+DEFAULT_USER_IMAGE = MEDIA_URL + 'users/photo_default.jpg"'

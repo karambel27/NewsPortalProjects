@@ -1,7 +1,6 @@
 from django import forms
 from allauth.account.forms import SignupForm
-from .models import Post, Category, Author
-
+from .models import Post, Category
 
 class FormAddpost(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), required=False,

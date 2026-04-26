@@ -1,10 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
 
 class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
 
     def __str__(self):
@@ -73,7 +74,7 @@ class PostCategory(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)

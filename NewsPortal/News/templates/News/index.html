@@ -12,6 +12,7 @@
     {% for post in posts %}
     <li>
         <h1>{{ post.title|censor }}</h1>
+        <p><b>Автор: </b>{{ post.author.user.username|default:'Неизвестно' }}</p>
         <p><b>Дата публикации: </b>{{ post.created_at|current_time|censor}}</p>
         <p>{{ post.content|truncatechars:20|censor}}</p>
         {% if post.type == 'news'%}

@@ -1,13 +1,15 @@
 {% extends 'flatpages/default.html' %}
 {% load News_tags %}
 {% block main %}
-        <p><b>Дата публикации: </b>{{ post.created_at|current_time }}</p>
-        <p>{{ post.content|censor}}</p>
-        {%  if post.type == 'news'%}
-            <p><a href="{% url 'updatenews' post.id%}">Редактировать новости</a></p>
-            <p><a href="{% url 'deletenews' post.id%}">Удалить новости</a></p>
-        {% else %}
-            <p><a href="{% url 'updatearticles' post.id%}">Редактировать статью</a></p>
-            <p><a href="{% url 'deletearticles' post.id%}">Удалить статью</a></p>
-        {% endif  %}
+<p><b>Дата публикации: </b>{{ post.created_at|current_time }}</p>
+<p>{{ post.content|censor}}</p>
+{% if edit_prov %}
+{%  if post.type == 'news'%}
+<p><a href="{% url 'updatenews' post.id%}">Редактировать новости</a></p>
+<p><a href="{% url 'deletenews' post.id%}">Удалить новости</a></p>
+{% else %}
+<p><a href="{% url 'updatearticles' post.id%}">Редактировать статью</a></p>
+<p><a href="{% url 'deletearticles' post.id%}">Удалить статью</a></p>
+{% endif  %}
+{% endif %}
 {% endblock %}
