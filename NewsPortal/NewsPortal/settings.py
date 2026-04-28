@@ -142,6 +142,14 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'account_login'
 AUTH_USER_MODEL = 'users.User'
-MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 DEFAULT_USER_IMAGE = MEDIA_URL + 'users/photo_default.jpg"'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'panovdaniil201510'
+EMAIL_HOST_PASSWORD = 'hjkdhwinfrtpzicy'
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'panovdaniil201510@yandex.ru'
+

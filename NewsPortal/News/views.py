@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from . import models
@@ -8,6 +10,7 @@ from .form import FormAddpost
 from .models import Post
 from .utils import PostTypeValidationMixin
 from .filters import PostsFilter
+
 
 class IndexView(ListView):
     model = Post
@@ -78,6 +81,15 @@ class AddPost(PermissionRequiredMixin, CreateView):
         form.instance.type = post_type
         w = form.save(commit=False)
         w.author = self.request.user.author
+        msg = EmailMultiAlternatives('Проверка',
+                                     'Базовое сообщение',
+                                     'panovdaniil201510@yandex.ru',
+                                     ['panovdaniil2015@list.ru', ])
+        html_content = render_to_string('soobshenie.html', {'w': w})
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        # send_mail('Проверка', 'Это базовое сообщение', 'panovdaniil201510@yandex.ru',
+        #           ['ts78@list.ru', 'panovdaniil2015@list.ru'])
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

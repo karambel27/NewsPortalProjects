@@ -1,5 +1,5 @@
 from django_filters import FilterSet, CharFilter, DateFilter, ModelMultipleChoiceFilter, ModelChoiceFilter
-from .models import Post, Author
+from .models import Post, Author, Category
 
 from django import forms
 
@@ -24,6 +24,14 @@ class PostsFilter(FilterSet):
         label='Автор',
         empty_label="--- Выберите автора ---", )
 
+    categories = ModelChoiceFilter(
+        field_name='categories',
+        queryset=Category.objects.all(),
+        to_field_name='id',
+        label="Категория",
+        empty_label='--- Выбрать категорию ---'
+    )
+
     created_after = DateFilter(
         field_name='created_at',
         lookup_expr='gte',
@@ -33,4 +41,4 @@ class PostsFilter(FilterSet):
 
     class Meta:
         model = Post
-        fields = ['author_username', 'title', 'created_after']
+        fields = ['author_username', 'title', "categories", 'created_after']

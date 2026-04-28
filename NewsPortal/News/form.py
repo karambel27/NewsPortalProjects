@@ -2,6 +2,7 @@ from django import forms
 from allauth.account.forms import SignupForm
 from .models import Post, Category
 
+
 class FormAddpost(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), required=False,
                                                 label="Категория")
@@ -13,6 +14,3 @@ class FormAddpost(forms.ModelForm):
         model = Post
         fields = ['title', 'content',
                   'categories']
-
-
-
