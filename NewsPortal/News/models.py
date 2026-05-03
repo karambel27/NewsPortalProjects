@@ -28,6 +28,8 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    subscribers = models.ManyToManyField(get_user_model(), blank=True, verbose_name='Подписчики',
+                                         related_name='categories')
 
     def __str__(self):
         return self.name
@@ -43,7 +45,8 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
     type = models.CharField(max_length=7, choices=POST_TYPES, verbose_name='Тип поста')
     created_at = models.DateTimeField(auto_now_add=True)
-    categories = models.ManyToManyField(Category, through='PostCategory', blank=True, verbose_name='Категория')
+    categories = models.ManyToManyField(Category, through='PostCategory', blank=True, verbose_name='Категория',
+                                        related_name='posts')
     title = models.CharField(max_length=255, verbose_name='Название')
     content = models.TextField(verbose_name='Контент')
     rating = models.FloatField(default=0.0, verbose_name='Рейтинг')

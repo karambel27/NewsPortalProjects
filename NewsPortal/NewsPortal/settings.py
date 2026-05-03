@@ -42,12 +42,13 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.yandex",
-    "News",
+    "News.apps.NewsConfig",
     "django.contrib.sites",
     "django.contrib.flatpages",
     "debug_toolbar",
     'django_filters',
     'users',
+    "django_apscheduler",
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,8 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
 
 ACCOUNT_SIGNUP_FIELDS = ['username*', 'email*', 'password1*', 'password2*']
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# mandatory
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 
 ACCOUNT_FORMS = {'signup': 'users.forms.MyCustomSignupForm'}
@@ -152,4 +154,9 @@ EMAIL_HOST_USER = 'panovdaniil201510'
 EMAIL_HOST_PASSWORD = 'hjkdhwinfrtpzicy'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = 'panovdaniil201510@yandex.ru'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

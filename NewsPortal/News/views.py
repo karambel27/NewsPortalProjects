@@ -1,13 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from . import models
 from .form import FormAddpost
-from .models import Post
+from .models import Post, Category
 from .utils import PostTypeValidationMixin
 from .filters import PostsFilter
 
@@ -81,13 +82,13 @@ class AddPost(PermissionRequiredMixin, CreateView):
         form.instance.type = post_type
         w = form.save(commit=False)
         w.author = self.request.user.author
-        msg = EmailMultiAlternatives('Проверка',
-                                     'Базовое сообщение',
-                                     'panovdaniil201510@yandex.ru',
-                                     ['panovdaniil2015@list.ru', ])
-        html_content = render_to_string('soobshenie.html', {'w': w})
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        # msg = EmailMultiAlternatives('Проверка',
+        #                              'Базовое сообщение',
+        #                              'panovdaniil201510@yandex.ru',
+        #                              ['panovdaniil2015@list.ru', ])
+        # html_content = render_to_string('soobshenie.html', {'w': w})
+        # msg.attach_alternative(html_content, "text/html")
+        # msg.send()
         # send_mail('Проверка', 'Это базовое сообщение', 'panovdaniil201510@yandex.ru',
         #           ['ts78@list.ru', 'panovdaniil2015@list.ru'])
         return super().form_valid(form)
@@ -123,6 +124,25 @@ class DeletePost(PostTypeValidationMixin, UserPassesTestMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = f'({self.object.title}): Удаление'
         return context
+
+
+class CategoriesView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'News/categories_view.html'
+    context_object_name = 'categories'
+    extra_context = {'title': 'Категории'}
+
+
+@login_required
+def subscribe_ot(request, pk):
+    cat = Category.objects.get(pk=pk)
+    user = request.user
+    if cat.subscribers.filter(id=user.id).exists():
+        cat.subscribers.remove(user)
+    else:
+        cat.subscribers.add(user)
+    return redirect(request.META.get('HTTP_REFERER'))
+
 
 # def index(requests):
 #     posts = models.Post.objects.all().order_by('-created_at')

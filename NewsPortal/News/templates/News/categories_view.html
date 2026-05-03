@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+{% block main %}
+<ul>
+    {% for category in categories %}
+    <li>
+
+        <p><b>Категория:</b> {{ category.name }}</p>
+
+        <button><a href="{% url 'subscribe_ot' category.id%}">{% if user in category.subscribers.all %}
+            Отписаться{% else %}Подписаться{% endif %}</a></button>
+        <hr>
+    </li>
+
+    {% endfor %}
+</ul>
+{% endblock %}

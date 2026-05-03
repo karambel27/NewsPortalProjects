@@ -38,6 +38,9 @@
                     <a class="nav-link" href="{% url 'addarticles' %}">Добавить статью </a>
                 </li>
                 {% endif %}
+                <li>
+                    <a class="nav-link" href="{% url 'categories' %}">Категории</a>
+                </li>
                 {% if user.is_authenticated %}
                 <li>
                 <li>
@@ -51,7 +54,8 @@
                 </li>
                 {% else %}
                 <li>
-                    <a class="nav-link" href="{% url 'account_login' %}">Войти</a>| <a class="nav-link" href="{% url 'account_signup' %}">Регистрация</a>
+                    <a class="nav-link" href="{% url 'account_login' %}">Войти</a>| <a class="nav-link"
+                                                                                       href="{% url 'account_signup' %}">Регистрация</a>
                 </li>
                 {% endif %}
 
