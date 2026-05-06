@@ -1,4 +1,4 @@
-<h1>Новые статьи за неделю</h1>
+<h1>Новые новости за неделю</h1>
 <ul>
     {% for article in articles %}
     <li><a href="http://127.0.0.1:8000{{ article.get_absolute_url }}">{{ article.title }}</a></li>

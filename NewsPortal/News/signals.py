@@ -5,23 +5,15 @@ from django.template.loader import render_to_string
 
 from NewsPortal import settings
 from .models import Post, Category
+from .tasks import notify_subscribers_task
 
 
 @receiver(m2m_changed, sender=Post.categories.through)
 def notify_subscribers(sender, instance, action, pk_set, **kwargs):
-    if action == 'post_add' and instance.type == 'article':
-        post = instance
-        added_categories = Category.objects.filter(pk__in=pk_set)
-        for category in added_categories:
-            subscribers = category.subscribers.all()
-            if subscribers.exists():
-                article_link = post.get_absolute_url()
-                subject = f"Новая статья в категории '{category.name}': {post.title}"
-                message = render_to_string('new_article_notification.html',
-                                           {'post': post, 'link': article_link, 'name': category.name})
-                from_email = settings.DEFAULT_FROM_EMAIL
-                recipient_list = [subscriber.email for subscriber in subscribers]
-                send_mail(subject, message, from_email, recipient_list, html_message=message)
+    if action == 'post_add' and instance.type == 'news':
+        post_id = instance.id
+        pk = list(pk_set)
+        notify_subscribers_task.delay(pk, post_id)
 
 
 '''Если пользователь подписан на какую-либо категорию, то, как только в неё добавляется новая статья, 

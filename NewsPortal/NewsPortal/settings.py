@@ -87,7 +87,7 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
 
 ACCOUNT_SIGNUP_FIELDS = ['username*', 'email*', 'password1*', 'password2*']
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 # mandatory
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 
@@ -130,6 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "UTC"
+CELERY_TIMEZONE = TIME_ZONE
+# TIME_ZONE = 'Asia/Vladivostok'
+
 
 USE_I18N = True
 
@@ -160,3 +163,9 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

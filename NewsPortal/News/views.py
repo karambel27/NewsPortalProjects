@@ -1,9 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.core.mail import send_mail, EmailMultiAlternatives
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from . import models
@@ -14,6 +11,10 @@ from .filters import PostsFilter
 
 
 class IndexView(ListView):
+    # def get(self, request):
+    #     weekly_newsletter.delay()
+    #     return HttpResponse('Hello!')
+
     model = Post
     template_name = 'News/index.html'
     ordering = '-created_at'
@@ -142,7 +143,6 @@ def subscribe_ot(request, pk):
     else:
         cat.subscribers.add(user)
     return redirect(request.META.get('HTTP_REFERER'))
-
 
 # def index(requests):
 #     posts = models.Post.objects.all().order_by('-created_at')
