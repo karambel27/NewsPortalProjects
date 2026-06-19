@@ -181,10 +181,22 @@ LOGGING = {
         "require_debug_false": {
             "()": "django.utils.log.RequireDebugFalse",
         },
+        "debug_info_only": {
+            "()": "NewsPortal.logging.MaxLevelFilter",
+            "max_level": 20,
+        },
+        "warning_and_above": {
+            "()": "NewsPortal.logging.MinLevelFilter",
+            "min_level": 30,
+        },
     },
 
     "formatters": {
-        "console": {
+        "console_debug_info": {
+            "format": "{asctime} {levelname} {message}",
+            "style": "{",
+        },
+        "console_warning": {
             "format": "{asctime} {levelname} {pathname} {message}",
             "style": "{",
         },
@@ -203,11 +215,17 @@ LOGGING = {
     },
 
     "handlers": {
-        "console": {
+        "console_debug_info": {
             "level": "DEBUG",
-            "filters": ["require_debug_true"],
+            "filters": ["require_debug_true", "debug_info_only"],
             "class": "logging.StreamHandler",
-            "formatter": "console",
+            "formatter": "console_debug_info",
+        },
+        "console_warning": {
+            "level": "WARNING",
+            "filters": ["require_debug_true", "warning_and_above"],
+            "class": "logging.StreamHandler",
+            "formatter": "console_warning",
         },
         "general_file": {
             "level": "INFO",
@@ -231,15 +249,14 @@ LOGGING = {
         "mail_admins": {
             "level": "ERROR",
             "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler",
+            "class": "NewsPortal.logging.NoTracebackAdminEmailHandler",
             "formatter": "errors",
-            "include_html": False,
         },
     },
 
     "loggers": {
         "django": {
-            "handlers": ["console", "general_file"],
+            "handlers": ["console_debug_info", "console_warning", "general_file"],
             "level": "DEBUG",
             "propagate": False,
         },
